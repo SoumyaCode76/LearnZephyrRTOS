@@ -1,6 +1,8 @@
 # Ignore everything in zephyr_project/ except apps/
 zephyrproject/*
 !zephyrproject/apps/
+# Ignore build artifacts
+zephyr-sdk-*/
 
 # Prerequisites
 *.d
