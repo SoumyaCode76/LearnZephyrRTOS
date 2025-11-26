@@ -1,0 +1,17 @@
+/ {
+    aliases {
+        led0 = &fake_led0;
+    };
+
+    fakes {
+        compatible = "gpio-leds";
+        fake_led0: led_0 {
+            gpios = <&gpio0 0 0>;
+            label = "Fake LED 0";
+        };
+    };
+};
+
+&gpio0 {
+    ngpios = <32>;
+};
