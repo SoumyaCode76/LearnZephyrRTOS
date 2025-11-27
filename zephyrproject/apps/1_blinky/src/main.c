@@ -3,30 +3,27 @@
 #include <zephyr/devicetree.h>
 #include <zephyr/drivers/gpio.h>
 
+
+//1. Check for board led0 alias
+#if DT_NODE_HAS_STATUS(DT_ALIAS(led0), okay)
+#define LED0_NODE DT_ALIAS(led0)
+#else
+#warning "Board does not define led0 as a devicetree alias. Please add in the board overlay file."
+#endif
+//2. Build a typed description of the LED pin from the devicetree
+#ifdef LED0_NODE
+static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET(LED0_NODE, gpios);
+#endif
 int main(void)
 {
-    const struct device *led;
-    int ret;
-
-    /* Get the device binding for the LED */
-    led = DEVICE_DT_GET(DT_ALIAS(led0));
-    if (!device_is_ready(led)) {
-        return -1;
+    //3. Make sure the device is ready
+    //4. Configure pin as output push-pull
+    while(1)
+    {
+        //5. Toggle LED pin
+        //6. Delay
+        return 0;
     }
-
-    /* Configure the LED pin as output */
-    ret = gpio_pin_configure(led, DT_GPIO_PIN(DT_ALIAS(led0), gpios),
-                             GPIO_OUTPUT_ACTIVE | DT_GPIO_FLAGS(DT_ALIAS(led0), gpios));
-    if (ret < 0) {
-        return -1;
-    }
-
-    while (1) {
-        /* Toggle the LED state */
-        gpio_pin_toggle(led, DT_GPIO_PIN(DT_ALIAS(led0), gpios));
-        printk("LED toggled\n");
-        k_msleep(1000); /* Sleep for 1000 milliseconds */
-    }
-
-    return 0;
 }
+
+ 
