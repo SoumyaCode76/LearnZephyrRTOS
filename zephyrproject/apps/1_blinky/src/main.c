@@ -1,4 +1,5 @@
 #include <zephyr/kernel.h>
+#include <zephyr/sys/printk.h>
 #include <zephyr/device.h>
 #include <zephyr/devicetree.h>
 #include <zephyr/drivers/gpio.h>
@@ -16,7 +17,18 @@ static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET(LED0_NODE, gpios);
 #endif
 int main(void)
 {
-    //3. Make sure the device is ready
+    //3. Make sure the device is ready (i.e. the device/peripheral is initialized)
+    #ifdef LED0_NODE
+    // if(!gpio_is_ready_dt(&led))
+    // {
+    //     printk("Error: not ready\n");
+    //     return -1;
+    // }
+    if(gpio_pin_configure(led.port, led.pin, GPIO_OUTPUT_INACTIVE) != 0)
+    {
+        printk("GPIO pin configuration failed\n");
+        return -1;
+    }
     //4. Configure pin as output push-pull
     while(1)
     {
@@ -24,6 +36,10 @@ int main(void)
         //6. Delay
         return 0;
     }
+    #else
+    printk("Error: No LED0 node found in devicetree\n");
+    return -1;
+    #endif
 }
 
  
