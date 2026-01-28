@@ -1,0 +1,22 @@
+@startuml
+title Button Press Logic Activity Diagram
+|User|
+  :Press Button at t1;
+|System|
+  :Detect Button Press through GPIO polling every 5 ms;
+  :Record Timestamp t1;
+|User|
+  :Release Button at t2;
+|System|
+  :Detect Button Release through GPIO polling every 5 ms;
+  :Record Timestamp t2;
+|System|
+  :Calculate Press Duration = t2 - t1;
+  if (Press Duration >= 5 ms?) then (yes)
+     if (Press Duration >= 300 ms?) then (yes)
+        :Classify as Single Press;
+     else (no)
+        :Classify as Short Press;
+start
+stop
+@enduml

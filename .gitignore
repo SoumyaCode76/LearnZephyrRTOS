@@ -1,8 +1,13 @@
-# Ignore everything in zephyr_project/ except apps/
+# Ignore Zephyr RTOS installation and SDK
+zephyr/
+zephyr-sdk-*/
+modules/
+bootloader/
+tools/
+
+# Ignore everything in zephyrproject/ except apps/
 zephyrproject/*
 !zephyrproject/apps/
-# Ignore build artifacts
-zephyr-sdk-*/
 
 # Prerequisites
 *.d
