@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Zephyr_Inter_Task_Communication_Guide.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="zephyr-rtos-inter-task-communication-guide">Zephyr RTOS: Inter-Task Communication Guide</h1>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#message-queues-k_msgq">Message Queues (k_msgq)</a></li>
+<li><a href="#mailboxes-k_mbox">Mailboxes (k_mbox)</a></li>
+<li><a href="#pipes-k_pipe">Pipes (k_pipe)</a></li>
+<li><a href="#work-queues-k_work--k_work_q">Work Queues (k_work / k_work_q)</a></li>
+<li><a href="#fifos-k_fifo">FIFOs (k_fifo)</a></li>
+<li><a href="#lifos-k_lifo">LIFOs (k_lifo)</a></li>
+<li><a href="#comparison-table">Comparison Table</a></li>
+<li><a href="#best-practices">Best Practices</a></li>
+</ol>
+<hr>
+<h2 id="overview">Overview</h2>
+<p>Zephyr RTOS provides several kernel objects for inter-task communication (ITC). Each object is optimized for different data-passing patterns, latency requirements, and thread-safety guarantees. Choosing the right ITC primitive reduces overhead, simplifies synchronization, and improves system determinism.</p>
+<hr>
+<h2 id="message-queues-kmsgq">Message Queues (k_msgq)</h2>
+<p>A <strong>message queue</strong> stores a fixed number of fixed-size messages in a FIFO ring buffer. Producers enqueue messages; consumers dequeue them. The queue is thread-safe and ISR-safe.</p>
+<h3 id="api-syntax">API Syntax</h3>
+<pre class="hljs"><code><div><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;zephyr/kernel.h&gt;</span></span>
+
+<span class="hljs-comment">/* ── Static definition ───────────────────────────────────────────── */</span>
+K_MSGQ_DEFINE(my_msgq,          <span class="hljs-comment">/* name                        */</span>
+              <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">uint32_t</span>), <span class="hljs-comment">/* message size in bytes        */</span>
+              <span class="hljs-number">10</span>,               <span class="hljs-comment">/* maximum number of messages   */</span>
+              <span class="hljs-number">4</span>);               <span class="hljs-comment">/* alignment of message buffer  */</span>
+
+<span class="hljs-comment">/* ── Runtime definition ──────────────────────────────────────────── */</span>
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">k_msgq</span> <span class="hljs-title">my_msgq</span>;</span>
+<span class="hljs-keyword">char</span> __aligned(<span class="hljs-number">4</span>) msgq_buffer[<span class="hljs-number">10</span> * <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">uint32_t</span>)];
+
+k_msgq_init(&amp;my_msgq, msgq_buffer, <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">uint32_t</span>), <span class="hljs-number">10</span>);
+
+<span class="hljs-comment">/* ── Send a message ──────────────────────────────────────────────── */</span>
+<span class="hljs-comment">// Block indefinitely until space is available</span>
+<span class="hljs-keyword">int</span> ret = k_msgq_put(&amp;my_msgq, &amp;data, K_FOREVER);
+
+<span class="hljs-comment">// Return immediately if queue is full</span>
+ret = k_msgq_put(&amp;my_msgq, &amp;data, K_NO_WAIT);
+
+<span class="hljs-comment">// Wait up to 100 ms</span>
+ret = k_msgq_put(&amp;my_msgq, &amp;data, K_MSEC(<span class="hljs-number">100</span>));
+
+<span class="hljs-comment">/* ── Receive a message ───────────────────────────────────────────── */</span>
+<span class="hljs-keyword">uint32_t</span> rx_data;
+ret = k_msgq_get(&amp;my_msgq, &amp;rx_data, K_FOREVER);
+ret = k_msgq_get(&amp;my_msgq, &amp;rx_data, K_NO_WAIT);
+ret = k_msgq_get(&amp;my_msgq, &amp;rx_data, K_MSEC(<span class="hljs-number">100</span>));
+
+<span class="hljs-comment">/* ── Peek without removing ───────────────────────────────────────── */</span>
+ret = k_msgq_peek(&amp;my_msgq, &amp;rx_data);
+
+<span class="hljs-comment">/* ── Queue status ────────────────────────────────────────────────── */</span>
+<span class="hljs-keyword">uint32_t</span> used  = k_msgq_num_used_get(&amp;my_msgq);
+<span class="hljs-keyword">uint32_t</span> <span class="hljs-built_in">free</span>  = k_msgq_num_free_get(&amp;my_msgq);
+
+<span class="hljs-comment">/* ── Purge all pending messages ──────────────────────────────────── */</span>
+k_msgq_purge(&amp;my_msgq);
+</div></code></pre>
+<h3 id="benefits">Benefits</h3>
+<ul>
+<li><strong>Simple, fixed-size protocol</strong> — zero dynamic allocation; message size is known at compile time.</li>
+<li><strong>ISR-safe</strong> — <code>k_msgq_put()</code> / <code>k_msgq_get()</code> can be called from interrupt handlers with <code>K_NO_WAIT</code>.</li>
+<li><strong>Built-in flow control</strong> — sender blocks or times out if the queue is full.</li>
+<li><strong>Ring-buffer efficiency</strong> — O(1) enqueue and dequeue with no fragmentation.</li>
+</ul>
+<h3 id="best-scenarios">Best Scenarios</h3>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Why Message Queues Fit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sensor data pipeline (ISR → processing thread)</td>
+<td>ISR-safe put; fixed sensor data size</td>
+</tr>
+<tr>
+<td>Command/event dispatch between tasks</td>
+<td>FIFO ordering preserves command sequence</td>
+</tr>
+<tr>
+<td>Logging subsystem (producer → logger thread)</td>
+<td>Natural back-pressure on overflow</td>
+</tr>
+<tr>
+<td>State machine event passing</td>
+<td>Each event is a small, fixed struct</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="mailboxes-kmbox">Mailboxes (k_mbox)</h2>
+<p>A <strong>mailbox</strong> provides synchronous or asynchronous message exchange with optional message queuing. Unlike message queues, mailboxes support variable-size data and can perform a zero-copy transfer directly between the sender's and receiver's buffers when both rendezvous simultaneously.</p>
+<h3 id="api-syntax">API Syntax</h3>
+<pre class="hljs"><code><div><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;zephyr/kernel.h&gt;</span></span>
+
+<span class="hljs-comment">/* ── Static definition ───────────────────────────────────────────── */</span>
+K_MBOX_DEFINE(my_mbox);
+
+<span class="hljs-comment">/* ── Runtime definition ──────────────────────────────────────────── */</span>
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">k_mbox</span> <span class="hljs-title">my_mbox</span>;</span>
+k_mbox_init(&amp;my_mbox);
+
+<span class="hljs-comment">/* ── Send a message ──────────────────────────────────────────────── */</span>
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">k_mbox_msg</span> <span class="hljs-title">send_msg</span> = {</span>
+    .<span class="hljs-built_in">size</span>   = <span class="hljs-keyword">sizeof</span>(my_data),   <span class="hljs-comment">/* number of bytes to transfer    */</span>
+    .info   = <span class="hljs-number">0x1234</span>,            <span class="hljs-comment">/* 32-bit app-defined type/info   */</span>
+    .tx_data = &amp;my_data,         <span class="hljs-comment">/* pointer to data (synchronous)  */</span>
+    .tx_target_thread = K_ANY,   <span class="hljs-comment">/* send to any waiting receiver   */</span>
+};
+
+<span class="hljs-comment">// Synchronous send – block until receiver collects the message</span>
+<span class="hljs-keyword">int</span> ret = k_mbox_put(&amp;my_mbox, &amp;send_msg, K_FOREVER);
+
+<span class="hljs-comment">// Asynchronous send – place in queue, return immediately</span>
+<span class="hljs-comment">// tx_sem is given by the kernel when the receiver collects the</span>
+<span class="hljs-comment">// message (or on error), so tx_sem must stay valid until then.</span>
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">k_sem</span> <span class="hljs-title">tx_sem</span>;</span>
+k_sem_init(&amp;tx_sem, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>);
+k_mbox_async_put(&amp;my_mbox, &amp;send_msg, &amp;tx_sem);
+<span class="hljs-comment">// Wait for delivery confirmation (optional)</span>
+k_sem_take(&amp;tx_sem, K_FOREVER);
+
+<span class="hljs-comment">/* ── Receive a message ───────────────────────────────────────────── */</span>
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">k_mbox_msg</span> <span class="hljs-title">recv_msg</span> = {</span>
+    .<span class="hljs-built_in">size</span>    = <span class="hljs-keyword">sizeof</span>(my_data),  <span class="hljs-comment">/* maximum bytes to accept        */</span>
+    .rx_source_thread = K_ANY,   <span class="hljs-comment">/* accept from any sender         */</span>
+};
+<span class="hljs-keyword">char</span> recv_buf[<span class="hljs-number">64</span>];
+
+ret = k_mbox_get(&amp;my_mbox, &amp;recv_msg, recv_buf, K_FOREVER);
+<span class="hljs-comment">// recv_msg.size now contains the actual number of bytes received</span>
+<span class="hljs-comment">// recv_msg.info contains the sender's info value</span>
+
+<span class="hljs-comment">/* ── Retrieve data after a header-only receive ───────────────────── */</span>
+<span class="hljs-comment">// First get only the header (pass NULL buffer)</span>
+ret = k_mbox_get(&amp;my_mbox, &amp;recv_msg, <span class="hljs-literal">NULL</span>, K_FOREVER);
+<span class="hljs-comment">// Then retrieve the actual payload</span>
+ret = k_mbox_data_get(&amp;recv_msg, recv_buf);
+
+<span class="hljs-comment">/* ── Block copy with dynamic allocation ──────────────────────────── */</span>
+<span class="hljs-comment">// 'block' receives a handle to the allocated memory region.</span>
+<span class="hljs-comment">// 'my_resource_pool' is a k_heap or k_mem_slab used as the</span>
+<span class="hljs-comment">// memory source; it must be initialised before this call.</span>
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">k_mem_block</span> <span class="hljs-title">block</span>;</span>
+ret = k_mbox_data_block_get(&amp;recv_msg, &amp;block, &amp;my_resource_pool, K_FOREVER);
+</div></code></pre>
+<h3 id="benefits">Benefits</h3>
+<ul>
+<li><strong>Variable message size</strong> — the sender specifies the exact byte count at runtime.</li>
+<li><strong>Zero-copy rendezvous</strong> — when sender and receiver are simultaneously ready, data is copied directly between their buffers, skipping any intermediate queue storage.</li>
+<li><strong>Directed messaging</strong> — a sender can target a specific receiver thread (<code>tx_target_thread</code>), and a receiver can filter by source thread (<code>rx_source_thread</code>).</li>
+<li><strong>Flexible synchronization</strong> — choose between blocking synchronous sends and non-blocking asynchronous sends backed by a semaphore.</li>
+</ul>
+<h3 id="best-scenarios">Best Scenarios</h3>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Why Mailboxes Fit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Transferring large, variable-length payloads</td>
+<td>Zero-copy path avoids extra memory copies</td>
+</tr>
+<tr>
+<td>Request-response protocols between two known threads</td>
+<td>Directed messaging guarantees delivery to the right thread</td>
+</tr>
+<tr>
+<td>Audio/image frame handoff</td>
+<td>Variable frame sizes; zero-copy minimizes latency</td>
+</tr>
+<tr>
+<td>Tasks exchanging metadata headers before bulk data</td>
+<td>Two-phase get (header then payload)</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="pipes-kpipe">Pipes (k_pipe)</h2>
+<p>A <strong>pipe</strong> provides a byte-stream channel between a writer and a reader. Data is written and read in arbitrary byte amounts from a kernel-managed ring buffer. Pipes are suitable for streaming data where message boundaries are not important.</p>
+<h3 id="api-syntax">API Syntax</h3>
+<pre class="hljs"><code><div><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;zephyr/kernel.h&gt;</span></span>
+
+<span class="hljs-comment">/* ── Static definition ───────────────────────────────────────────── */</span>
+K_PIPE_DEFINE(my_pipe,    <span class="hljs-comment">/* name             */</span>
+              <span class="hljs-number">256</span>,        <span class="hljs-comment">/* buffer size (bytes) */</span>
+              <span class="hljs-number">4</span>);         <span class="hljs-comment">/* alignment        */</span>
+
+<span class="hljs-comment">/* ── Runtime definition ──────────────────────────────────────────── */</span>
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">k_pipe</span> <span class="hljs-title">my_pipe</span>;</span>
+<span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">char</span> pipe_buf[<span class="hljs-number">256</span>];
+k_pipe_init(&amp;my_pipe, pipe_buf, <span class="hljs-keyword">sizeof</span>(pipe_buf));
+
+<span class="hljs-comment">/* ── Write to the pipe ───────────────────────────────────────────── */</span>
+<span class="hljs-keyword">size_t</span> bytes_written;
+<span class="hljs-keyword">int</span> ret = k_pipe_put(&amp;my_pipe,
+                     src_buf,          <span class="hljs-comment">/* pointer to data to send   */</span>
+                     <span class="hljs-number">128</span>,              <span class="hljs-comment">/* number of bytes to write  */</span>
+                     &amp;bytes_written,   <span class="hljs-comment">/* actual bytes written      */</span>
+                     <span class="hljs-number">1</span>,                <span class="hljs-comment">/* minimum bytes to write    */</span>
+                     K_FOREVER);       <span class="hljs-comment">/* timeout                   */</span>
+
+<span class="hljs-comment">/* ── Read from the pipe ──────────────────────────────────────────── */</span>
+<span class="hljs-keyword">size_t</span> bytes_read;
+ret = k_pipe_get(&amp;my_pipe,
+                 dst_buf,             <span class="hljs-comment">/* destination buffer         */</span>
+                 <span class="hljs-number">128</span>,                 <span class="hljs-comment">/* bytes requested            */</span>
+                 &amp;bytes_read,         <span class="hljs-comment">/* actual bytes read          */</span>
+                 <span class="hljs-number">1</span>,                   <span class="hljs-comment">/* minimum bytes to read      */</span>
+                 K_FOREVER);
+
+<span class="hljs-comment">/* ── Query available data / free space ───────────────────────────── */</span>
+<span class="hljs-keyword">size_t</span> readable = k_pipe_read_avail(&amp;my_pipe);
+<span class="hljs-keyword">size_t</span> writable = k_pipe_write_avail(&amp;my_pipe);
+</div></code></pre>
+<h3 id="benefits">Benefits</h3>
+<ul>
+<li><strong>Byte-stream semantics</strong> — readers and writers are decoupled from message boundaries.</li>
+<li><strong>Configurable minimum transfer</strong> — the <code>min_xfer</code> parameter prevents spurious wake-ups; a thread only unblocks when at least N bytes are available.</li>
+<li><strong>Single kernel buffer</strong> — no per-message metadata overhead; efficient for continuous streams.</li>
+<li><strong>Bidirectional flow control</strong> — both put and get honor timeouts so neither side can starve the other indefinitely.</li>
+</ul>
+<h3 id="best-scenarios">Best Scenarios</h3>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Why Pipes Fit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Serial / UART data streaming</td>
+<td>Byte-stream naturally maps to character streams</td>
+</tr>
+<tr>
+<td>Audio sample buffering</td>
+<td>Continuous, boundary-less sample data</td>
+</tr>
+<tr>
+<td>Protocol parsers consuming variable-length frames</td>
+<td>Reader can request exactly the bytes it needs</td>
+</tr>
+<tr>
+<td>IPC between threads at different data rates</td>
+<td>Pipe acts as a rate-decoupling buffer</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="work-queues-kwork--kworkq">Work Queues (k_work / k_work_q)</h2>
+<p>A <strong>work queue</strong> is a dedicated thread that executes <strong>work items</strong> — callbacks submitted from other threads or ISRs. Work items are queued and processed sequentially, offloading time-consuming work from ISR context or high-priority threads.</p>
+<h3 id="api-syntax">API Syntax</h3>
+<pre class="hljs"><code><div><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;zephyr/kernel.h&gt;</span></span>
+
+<span class="hljs-comment">/* ════════════════════════════════════════════════════════════════════
+ * Simple Work Items (k_work)
+ * ════════════════════════════════════════════════════════════════════ */</span>
+
+<span class="hljs-comment">/* ── Define and initialize ───────────────────────────────────────── */</span>
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">k_work</span> <span class="hljs-title">my_work</span>;</span>
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">work_handler</span><span class="hljs-params">(struct k_work *work)</span>
+</span>{
+    <span class="hljs-comment">// Work executed in the work queue thread context</span>
+    printk(<span class="hljs-string">"Work item executed\n"</span>);
+}
+
+k_work_init(&amp;my_work, work_handler);
+
+<span class="hljs-comment">/* ── Submit to the system work queue ────────────────────────────── */</span>
+k_work_submit(&amp;my_work);
+
+<span class="hljs-comment">/* ── Submit to a custom work queue ──────────────────────────────── */</span>
+k_work_submit_to_queue(&amp;my_work_q, &amp;my_work);
+
+<span class="hljs-comment">/* ── Cancel a pending work item ─────────────────────────────────── */</span>
+<span class="hljs-keyword">int</span> ret = k_work_cancel(&amp;my_work);
+
+<span class="hljs-comment">/* ── Check work item state ───────────────────────────────────────── */</span>
+<span class="hljs-keyword">bool</span> pending = k_work_is_pending(&amp;my_work);
+
+<span class="hljs-comment">/* ════════════════════════════════════════════════════════════════════
+ * Delayable Work Items (k_work_delayable)
+ * ════════════════════════════════════════════════════════════════════ */</span>
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">k_work_delayable</span> <span class="hljs-title">my_dwork</span>;</span>
+
+k_work_init_delayable(&amp;my_dwork, work_handler);
+
+<span class="hljs-comment">// Submit after 500 ms delay</span>
+k_work_schedule(&amp;my_dwork, K_MSEC(<span class="hljs-number">500</span>));
+
+<span class="hljs-comment">// Submit to a specific queue after a delay</span>
+k_work_schedule_for_queue(&amp;my_work_q, &amp;my_dwork, K_MSEC(<span class="hljs-number">500</span>));
+
+<span class="hljs-comment">// Reschedule (resets delay if already pending)</span>
+k_work_reschedule(&amp;my_dwork, K_MSEC(<span class="hljs-number">200</span>));
+
+<span class="hljs-comment">// Cancel delayable work</span>
+k_work_cancel_delayable(&amp;my_dwork);
+
+<span class="hljs-comment">/* ════════════════════════════════════════════════════════════════════
+ * Custom Work Queue (k_work_q)
+ * ════════════════════════════════════════════════════════════════════ */</span>
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">k_work_q</span> <span class="hljs-title">my_work_q</span>;</span>
+
+K_THREAD_STACK_DEFINE(my_wq_stack, <span class="hljs-number">1024</span>);
+
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">k_work_queue_config</span> <span class="hljs-title">wq_cfg</span> = {</span>
+    .name      = <span class="hljs-string">"my_wq"</span>,
+    .no_yield  = <span class="hljs-literal">false</span>,
+};
+
+k_work_queue_init(&amp;my_work_q);
+k_work_queue_start(&amp;my_work_q,
+                   my_wq_stack,
+                   K_THREAD_STACK_SIZEOF(my_wq_stack),
+                   <span class="hljs-number">5</span>,         <span class="hljs-comment">/* priority */</span>
+                   &amp;wq_cfg);
+
+<span class="hljs-comment">/* ── Drain the work queue (wait for all items to finish) ────────── */</span>
+<span class="hljs-keyword">bool</span> <span class="hljs-built_in">running</span> = k_work_queue_drain(&amp;my_work_q, <span class="hljs-literal">false</span>);
+
+<span class="hljs-comment">/* ── Stop the work queue ─────────────────────────────────────────── */</span>
+k_work_queue_unplug(&amp;my_work_q);
+</div></code></pre>
+<h3 id="benefits">Benefits</h3>
+<ul>
+<li><strong>ISR offloading</strong> — submit work from an ISR with <code>K_NO_WAIT</code> semantics; the handler runs in thread context where blocking and allocation are allowed.</li>
+<li><strong>Serialized execution</strong> — items in the same queue run one at a time, eliminating data races without explicit locking.</li>
+<li><strong>Delayable items</strong> — schedule callbacks at a future time without a dedicated thread or timer callback doing the real work.</li>
+<li><strong>System work queue</strong> — Zephyr provides a ready-to-use system work queue (<code>k_sys_work_q</code>), reducing boilerplate.</li>
+<li><strong>Priority control</strong> — custom queues can be created at any priority to control scheduling relative to other threads.</li>
+</ul>
+<h3 id="best-scenarios">Best Scenarios</h3>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Why Work Queues Fit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GPIO / interrupt debouncing</td>
+<td>ISR submits work; handler runs 50 ms later via <code>k_work_schedule</code></td>
+</tr>
+<tr>
+<td>Deferred driver I/O completion</td>
+<td>ISR signals completion; slow processing happens off the ISR stack</td>
+</tr>
+<tr>
+<td>Periodic maintenance tasks</td>
+<td><code>k_work_reschedule</code> provides timer-like behavior in thread context</td>
+</tr>
+<tr>
+<td>Event-driven state machines</td>
+<td>Each event becomes a work item, serialized execution is lock-free</td>
+</tr>
+<tr>
+<td>Sensor polling at fixed intervals</td>
+<td>Delayable work replaces a dedicated polling thread</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="fifos-kfifo">FIFOs (k_fifo)</h2>
+<p>A <strong>FIFO</strong> is a singly-linked, first-in-first-out queue of arbitrary data items. Unlike message queues, the items themselves are linked together in memory — the kernel stores a pointer to each item rather than copying data. This makes FIFOs a zero-copy, allocation-free queue for items already residing in memory.</p>
+<h3 id="api-syntax">API Syntax</h3>
+<pre class="hljs"><code><div><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;zephyr/kernel.h&gt;</span></span>
+
+<span class="hljs-comment">/* Items placed in a FIFO MUST have a reserved pointer field
+ * as their first member.                                          */</span>
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">my_item</span> {</span>
+    <span class="hljs-keyword">void</span>  *fifo_reserved;   <span class="hljs-comment">/* required first field               */</span>
+    <span class="hljs-keyword">int</span>    value;
+    <span class="hljs-keyword">char</span>   data[<span class="hljs-number">32</span>];
+};
+
+<span class="hljs-comment">/* ── Static definition ───────────────────────────────────────────── */</span>
+K_FIFO_DEFINE(my_fifo);
+
+<span class="hljs-comment">/* ── Runtime definition ──────────────────────────────────────────── */</span>
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">k_fifo</span> <span class="hljs-title">my_fifo</span>;</span>
+k_fifo_init(&amp;my_fifo);
+
+<span class="hljs-comment">/* ── Enqueue a single item ───────────────────────────────────────── */</span>
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">my_item</span> <span class="hljs-title">item</span> = {</span> .value = <span class="hljs-number">42</span> };
+k_fifo_put(&amp;my_fifo, &amp;item);
+
+<span class="hljs-comment">/* ── Enqueue a list of items atomically ─────────────────────────── */</span>
+<span class="hljs-comment">// Build a singly-linked list first, then hand it to the FIFO.</span>
+<span class="hljs-keyword">sys_slist_t</span> pending_list;
+sys_slist_init(&amp;pending_list);
+
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">my_item</span> <span class="hljs-title">a</span> = {</span> .value = <span class="hljs-number">1</span> };
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">my_item</span> <span class="hljs-title">b</span> = {</span> .value = <span class="hljs-number">2</span> };
+sys_slist_append(&amp;pending_list, (<span class="hljs-keyword">sys_snode_t</span> *)&amp;a);
+sys_slist_append(&amp;pending_list, (<span class="hljs-keyword">sys_snode_t</span> *)&amp;b);
+
+k_fifo_put_list(&amp;my_fifo, &amp;pending_list);
+
+<span class="hljs-comment">// Alternatively, provide head and tail pointers directly</span>
+k_fifo_put_slist(&amp;my_fifo, &amp;pending_list);
+
+<span class="hljs-comment">/* ── Dequeue (blocking) ──────────────────────────────────────────── */</span>
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">my_item</span> *<span class="hljs-title">rx</span> = (<span class="hljs-title">struct</span> <span class="hljs-title">my_item</span> *)<span class="hljs-title">k_fifo_get</span>(&amp;<span class="hljs-title">my_fifo</span>, <span class="hljs-title">K_FOREVER</span>);</span>
+rx = (struct my_item *)k_fifo_get(&amp;my_fifo, K_NO_WAIT);
+rx = (struct my_item *)k_fifo_get(&amp;my_fifo, K_MSEC(<span class="hljs-number">100</span>));
+
+<span class="hljs-comment">/* ── Peek at head without removing ──────────────────────────────── */</span>
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">my_item</span> *<span class="hljs-title">peeked</span> = (<span class="hljs-title">struct</span> <span class="hljs-title">my_item</span> *)<span class="hljs-title">k_fifo_peek_head</span>(&amp;<span class="hljs-title">my_fifo</span>);</span>
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">my_item</span> *<span class="hljs-title">tail</span>   = (<span class="hljs-title">struct</span> <span class="hljs-title">my_item</span> *)<span class="hljs-title">k_fifo_peek_tail</span>(&amp;<span class="hljs-title">my_fifo</span>);</span>
+
+<span class="hljs-comment">/* ── Check if empty ──────────────────────────────────────────────── */</span>
+<span class="hljs-keyword">bool</span> empty = k_fifo_is_empty(&amp;my_fifo);
+</div></code></pre>
+<h3 id="benefits">Benefits</h3>
+<ul>
+<li><strong>Zero-copy</strong> — only a pointer is queued; the data stays in the producer's buffer until the consumer uses it.</li>
+<li><strong>No data size limit</strong> — items can be any size because the queue stores pointers, not copies.</li>
+<li><strong>ISR-safe</strong> — <code>k_fifo_put()</code> is callable from ISRs for lock-free producer scenarios.</li>
+<li><strong>Atomic list enqueue</strong> — <code>k_fifo_put_list()</code> adds an entire pre-built linked list in one atomic operation.</li>
+</ul>
+<h3 id="best-scenarios">Best Scenarios</h3>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Why FIFOs Fit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Memory-pool–based message passing</td>
+<td>Items are allocated from a pool and freed after consumption</td>
+</tr>
+<tr>
+<td>Network packet queuing</td>
+<td>Large, variable-size packets passed by pointer</td>
+</tr>
+<tr>
+<td>Event objects managed by a memory pool</td>
+<td>Zero-copy avoids copying large structs</td>
+</tr>
+<tr>
+<td>ISR → thread handoff of pre-allocated buffers</td>
+<td>ISR allocates from pool, enqueues pointer, thread processes and frees</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="lifos-klifo">LIFOs (k_lifo)</h2>
+<p>A <strong>LIFO</strong> is a singly-linked, last-in-first-out stack of arbitrary data items. Like FIFOs, items must have a reserved pointer as their first member. LIFOs are useful when the most-recently added item should be processed first (stack semantics).</p>
+<h3 id="api-syntax">API Syntax</h3>
+<pre class="hljs"><code><div><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;zephyr/kernel.h&gt;</span></span>
+
+<span class="hljs-comment">/* Items placed in a LIFO MUST have a reserved pointer field
+ * as their first member (same requirement as FIFO).               */</span>
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">my_item</span> {</span>
+    <span class="hljs-keyword">void</span>  *lifo_reserved;   <span class="hljs-comment">/* required first field               */</span>
+    <span class="hljs-keyword">int</span>    value;
+};
+
+<span class="hljs-comment">/* ── Static definition ───────────────────────────────────────────── */</span>
+K_LIFO_DEFINE(my_lifo);
+
+<span class="hljs-comment">/* ── Runtime definition ──────────────────────────────────────────── */</span>
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">k_lifo</span> <span class="hljs-title">my_lifo</span>;</span>
+k_lifo_init(&amp;my_lifo);
+
+<span class="hljs-comment">/* ── Push an item ────────────────────────────────────────────────── */</span>
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">my_item</span> <span class="hljs-title">item</span> = {</span> .value = <span class="hljs-number">10</span> };
+k_lifo_put(&amp;my_lifo, &amp;item);
+
+<span class="hljs-comment">/* ── Pop an item (blocking) ──────────────────────────────────────── */</span>
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">my_item</span> *<span class="hljs-title">rx</span> = (<span class="hljs-title">struct</span> <span class="hljs-title">my_item</span> *)<span class="hljs-title">k_lifo_get</span>(&amp;<span class="hljs-title">my_lifo</span>, <span class="hljs-title">K_FOREVER</span>);</span>
+rx = (struct my_item *)k_lifo_get(&amp;my_lifo, K_NO_WAIT);
+rx = (struct my_item *)k_lifo_get(&amp;my_lifo, K_MSEC(<span class="hljs-number">100</span>));
+</div></code></pre>
+<h3 id="benefits">Benefits</h3>
+<ul>
+<li><strong>Stack (LIFO) ordering</strong> — the most recently added item is processed first, providing temporal locality.</li>
+<li><strong>Zero-copy</strong> — pointer-based, identical to FIFO in memory efficiency.</li>
+<li><strong>ISR-safe</strong> — <code>k_lifo_put()</code> is callable from ISRs.</li>
+<li><strong>Cache-friendly</strong> — recently pushed items are likely still in CPU cache when popped.</li>
+</ul>
+<h3 id="best-scenarios">Best Scenarios</h3>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Why LIFOs Fit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Free-list / memory-pool management</td>
+<td>Reuse the most recently freed buffer (cache warm)</td>
+</tr>
+<tr>
+<td>Undo/history stacks in UI tasks</td>
+<td>Natural LIFO semantics for history</td>
+</tr>
+<tr>
+<td>Priority-less work where recency matters</td>
+<td>Latest data is processed before older stale data</td>
+</tr>
+<tr>
+<td>Recursive work decomposition</td>
+<td>Push sub-tasks and pop in reverse order</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="comparison-table">Comparison Table</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Message Queue</th>
+<th>Mailbox</th>
+<th>Pipe</th>
+<th>Work Queue</th>
+<th>FIFO</th>
+<th>LIFO</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Data model</strong></td>
+<td>Fixed-size msgs</td>
+<td>Variable-size msgs</td>
+<td>Byte stream</td>
+<td>Callback functions</td>
+<td>Variable-size items (ptr)</td>
+<td>Variable-size items (ptr)</td>
+</tr>
+<tr>
+<td><strong>Ordering</strong></td>
+<td>FIFO</td>
+<td>FIFO</td>
+<td>FIFO</td>
+<td>FIFO (per queue)</td>
+<td>FIFO</td>
+<td>LIFO</td>
+</tr>
+<tr>
+<td><strong>Copy semantics</strong></td>
+<td>Copy into kernel buffer</td>
+<td>Copy or zero-copy rendezvous</td>
+<td>Copy into ring buffer</td>
+<td>N/A (function pointer)</td>
+<td>Zero-copy (pointer)</td>
+<td>Zero-copy (pointer)</td>
+</tr>
+<tr>
+<td><strong>ISR-safe put</strong></td>
+<td>✅</td>
+<td>❌</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>Directed messaging</strong></td>
+<td>❌</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>Variable message size</strong></td>
+<td>❌</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>Built-in delay support</strong></td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>✅ (<code>k_work_delayable</code>)</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>Typical use</strong></td>
+<td>Commands, events</td>
+<td>Large payloads, RPC</td>
+<td>Byte streams</td>
+<td>Deferred/periodic work</td>
+<td>Packet queuing</td>
+<td>Free lists, undo stacks</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="best-practices">Best Practices</h2>
+<ol>
+<li>
+<p><strong>Match semantics to your data model.</strong></p>
+<ul>
+<li>Use a <strong>message queue</strong> for small, fixed-size events or commands.</li>
+<li>Use a <strong>mailbox</strong> when message sizes vary or you need directed, synchronous handshakes.</li>
+<li>Use a <strong>pipe</strong> for continuous byte streams with no natural framing.</li>
+<li>Use a <strong>FIFO</strong> or <strong>LIFO</strong> when the item already lives in memory and copying is wasteful.</li>
+<li>Use a <strong>work queue</strong> to defer processing out of ISR or high-priority thread context.</li>
+</ul>
+</li>
+<li>
+<p><strong>Prefer <code>K_MSGQ_DEFINE</code> / <code>K_PIPE_DEFINE</code> / <code>K_FIFO_DEFINE</code></strong> (compile-time macros) over runtime initialization to avoid startup ordering issues and reduce RAM fragmentation.</p>
+</li>
+<li>
+<p><strong>Always check return values.</strong> <code>k_msgq_put()</code>, <code>k_pipe_put()</code>, and similar functions return <code>-EAGAIN</code> on timeout and <code>-ENOMSG</code> when no message is available. Ignoring these values causes silent data loss.</p>
+</li>
+<li>
+<p><strong>Size your buffers for worst-case burst.</strong> Use <code>k_msgq_num_free_get()</code> or <code>k_pipe_write_avail()</code> in diagnostic code to detect near-overflow conditions during testing.</p>
+</li>
+<li>
+<p><strong>Avoid blocking inside ISRs.</strong> All ISR-safe put functions must be called with <code>K_NO_WAIT</code>. Blocking timeouts in ISR context will cause a kernel panic.</p>
+</li>
+<li>
+<p><strong>Use the system work queue (<code>k_sys_work_q</code>) for lightweight deferred work.</strong> Reserve custom work queues for tasks that need a specific stack size, priority, or isolation from system work.</p>
+</li>
+<li>
+<p><strong>Align message buffers.</strong> Message queues require that the buffer alignment matches the alignment of the message type. Use <code>__aligned(N)</code> or specify alignment in <code>K_MSGQ_DEFINE</code> to avoid hard faults on architectures with strict alignment requirements.</p>
+</li>
+<li>
+<p><strong>Combine ITC primitives when needed.</strong> For example, a FIFO can carry pre-allocated buffers while a semaphore signals the consumer — this pattern avoids copying large payloads while still providing flow control.</p>
+</li>
+</ol>
+
+</body>
+</html>
