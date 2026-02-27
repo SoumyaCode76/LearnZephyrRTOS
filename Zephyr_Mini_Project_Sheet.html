@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Zephyr_Mini_Project_Sheet.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="zephyr-rtos-mini-project-practice-sheet">Zephyr RTOS Mini-Project Practice Sheet</h1>
+<p>A collection of 10 hands-on projects designed for all-round practice of Zephyr RTOS application development using QEMU emulation.</p>
+<hr>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li>Zephyr SDK installed and configured</li>
+<li>QEMU installed for ARM emulation</li>
+<li>Familiarity with C programming</li>
+<li>Basic understanding of RTOS concepts</li>
+</ul>
+<p><strong>Target Board for QEMU:</strong> <code>qemu_cortex_m3</code> or <code>qemu_x86</code></p>
+<p><strong>Build &amp; Run Commands:</strong></p>
+<pre class="hljs"><code><div><span class="hljs-comment"># Build</span>
+west build -b qemu_cortex_m3 -p always
+
+<span class="hljs-comment"># Run in QEMU</span>
+west build -t run
+</div></code></pre>
+<hr>
+<h2 id="project-1-blinking-led-simulator">Project 1: Blinking LED Simulator</h2>
+<p><strong>Difficulty:</strong> ⭐ Beginner</p>
+<h3 id="objective">Objective</h3>
+<p>Create a simulated LED blinker that prints &quot;LED ON&quot; and &quot;LED OFF&quot; messages alternately at 1-second intervals using a software timer.</p>
+<h3 id="requirements">Requirements</h3>
+<ol>
+<li>Use <code>K_TIMER_DEFINE()</code> to create a timer</li>
+<li>Implement expiry callback to toggle LED state</li>
+<li>Print current LED state on each toggle</li>
+<li>LED should start in OFF state</li>
+</ol>
+<h3 id="expected-output">Expected Output</h3>
+<pre class="hljs"><code><div>[00:00:01.000] LED ON
+[00:00:02.000] LED OFF
+[00:00:03.000] LED ON
+...
+</div></code></pre>
+<h3 id="hints">Hints</h3>
+<ul>
+<li>Use a static boolean variable to track LED state</li>
+<li>Timer period should be 1000ms</li>
+<li>Use <code>printk()</code> for output</li>
+</ul>
+<h3 id="learning-outcomes">Learning Outcomes</h3>
+<ul>
+<li>Software timer initialization and usage</li>
+<li>Callback functions in ISR context</li>
+<li>Basic Zephyr project structure</li>
+</ul>
+<hr>
+<h2 id="project-2-multi-threaded-counter">Project 2: Multi-Threaded Counter</h2>
+<p><strong>Difficulty:</strong> ⭐ Beginner</p>
+<h3 id="objective">Objective</h3>
+<p>Create two threads that increment a shared counter. Thread A increments by 1, Thread B increments by 2. Print the counter value after each increment.</p>
+<h3 id="requirements">Requirements</h3>
+<ol>
+<li>Define two threads using <code>K_THREAD_DEFINE()</code></li>
+<li>Use a mutex to protect the shared counter</li>
+<li>Each thread should have a 500ms delay between increments</li>
+<li>Print which thread performed the increment</li>
+<li>Run for 10 seconds total</li>
+</ol>
+<h3 id="expected-output">Expected Output</h3>
+<pre class="hljs"><code><div>[Thread A] Counter: 1
+[Thread B] Counter: 3
+[Thread A] Counter: 4
+[Thread B] Counter: 6
+...
+</div></code></pre>
+<h3 id="hints">Hints</h3>
+<ul>
+<li>Use <code>K_MUTEX_DEFINE()</code> for the mutex</li>
+<li>Lock mutex before accessing counter, unlock after</li>
+<li>Use <code>k_msleep()</code> for delays</li>
+<li>Consider thread priorities</li>
+</ul>
+<h3 id="learning-outcomes">Learning Outcomes</h3>
+<ul>
+<li>Thread creation and management</li>
+<li>Mutex usage for shared resource protection</li>
+<li>Thread synchronization basics</li>
+</ul>
+<hr>
+<h2 id="project-3-producer-consumer-with-message-queue">Project 3: Producer-Consumer with Message Queue</h2>
+<p><strong>Difficulty:</strong> ⭐⭐ Intermediate</p>
+<h3 id="objective">Objective</h3>
+<p>Implement a producer-consumer pattern where one thread produces sensor readings and another thread consumes and processes them.</p>
+<h3 id="requirements">Requirements</h3>
+<ol>
+<li>Producer thread generates random &quot;temperature&quot; readings (20-40 range)</li>
+<li>Consumer thread reads and calculates running average</li>
+<li>Use message queue for communication</li>
+<li>Producer generates data every 200ms</li>
+<li>Consumer processes and prints every 500ms</li>
+<li>Print queue status (items pending)</li>
+</ol>
+<h3 id="expected-output">Expected Output</h3>
+<pre class="hljs"><code><div>[Producer] Generated temp: 25
+[Producer] Generated temp: 31
+[Consumer] Received: 25, 31 | Average: 28.0
+[Producer] Generated temp: 22
+...
+</div></code></pre>
+<h3 id="hints">Hints</h3>
+<ul>
+<li>Use <code>K_MSGQ_DEFINE()</code> with appropriate size</li>
+<li>Store temperature in a struct with timestamp</li>
+<li>Use <code>k_msgq_num_used_get()</code> for queue status</li>
+<li>Handle queue full/empty conditions</li>
+</ul>
+<h3 id="learning-outcomes">Learning Outcomes</h3>
+<ul>
+<li>Message queue operations</li>
+<li>Inter-thread communication</li>
+<li>Data structure design for messaging</li>
+</ul>
+<hr>
+<h2 id="project-4-traffic-light-state-machine">Project 4: Traffic Light State Machine</h2>
+<p><strong>Difficulty:</strong> ⭐⭐ Intermediate</p>
+<h3 id="objective">Objective</h3>
+<p>Implement a traffic light controller using a state machine with timers. Simulate RED, YELLOW, and GREEN states with appropriate timings.</p>
+<h3 id="requirements">Requirements</h3>
+<ol>
+<li>States: RED (5s) → GREEN (4s) → YELLOW (1s) → RED...</li>
+<li>Print state transitions with timestamps</li>
+<li>Implement a pedestrian button interrupt simulation</li>
+<li>When &quot;button pressed&quot;, immediately transition to YELLOW (if GREEN)</li>
+<li>Use a semaphore to signal button press from another thread</li>
+</ol>
+<h3 id="expected-output">Expected Output</h3>
+<pre class="hljs"><code><div>[00:00:00.000] Traffic Light: RED
+[00:00:05.000] Traffic Light: GREEN
+[00:00:07.500] PEDESTRIAN BUTTON PRESSED
+[00:00:07.500] Traffic Light: YELLOW
+[00:00:08.500] Traffic Light: RED
+...
+</div></code></pre>
+<h3 id="hints">Hints</h3>
+<ul>
+<li>Use enumeration for states</li>
+<li>Create separate timer for each state duration</li>
+<li>Button simulation thread gives semaphore every 7-15 seconds randomly</li>
+<li>Main thread takes semaphore with <code>K_NO_WAIT</code> to check</li>
+</ul>
+<h3 id="learning-outcomes">Learning Outcomes</h3>
+<ul>
+<li>State machine implementation</li>
+<li>Semaphore signaling</li>
+<li>Event-driven programming</li>
+<li>Timer management</li>
+</ul>
+<hr>
+<h2 id="project-5-uart-command-processor">Project 5: UART Command Processor</h2>
+<p><strong>Difficulty:</strong> ⭐⭐ Intermediate</p>
+<h3 id="objective">Objective</h3>
+<p>Create a UART-based command processor that accepts text commands and executes corresponding actions.</p>
+<h3 id="requirements">Requirements</h3>
+<ol>
+<li>Accept commands via UART input</li>
+<li>Implement at least 5 commands:
+<ul>
+<li><code>help</code> - List available commands</li>
+<li><code>status</code> - Print system uptime and thread info</li>
+<li><code>led on/off</code> - Toggle simulated LED</li>
+<li><code>count</code> - Print a running counter value</li>
+<li><code>echo &lt;text&gt;</code> - Echo back the text</li>
+</ul>
+</li>
+<li>Handle unknown commands gracefully</li>
+<li>Support command history (last 3 commands)</li>
+</ol>
+<h3 id="expected-output">Expected Output</h3>
+<pre class="hljs"><code><div>&gt; help
+Available commands: help, status, led, count, echo
+&gt; status
+Uptime: 5230 ms | Active threads: 2
+&gt; led on
+LED is now ON
+&gt; echo Hello Zephyr
+Hello Zephyr
+&gt; unknown
+Error: Unknown command 'unknown'
+</div></code></pre>
+<h3 id="hints">Hints</h3>
+<ul>
+<li>Use UART interrupt callback for receiving</li>
+<li>Parse commands using <code>strcmp()</code> or custom parser</li>
+<li>Store command history in circular buffer</li>
+<li>Use <code>k_uptime_get()</code> for uptime</li>
+</ul>
+<h3 id="learning-outcomes">Learning Outcomes</h3>
+<ul>
+<li>UART driver usage</li>
+<li>String parsing and command handling</li>
+<li>Circular buffer implementation</li>
+<li>System information APIs</li>
+</ul>
+<hr>
+<h2 id="project-6-workqueue-task-scheduler">Project 6: Workqueue Task Scheduler</h2>
+<p><strong>Difficulty:</strong> ⭐⭐⭐ Advanced</p>
+<h3 id="objective">Objective</h3>
+<p>Create a task scheduler using workqueues that processes different types of work items with priorities.</p>
+<h3 id="requirements">Requirements</h3>
+<ol>
+<li>Define 3 types of work items:
+<ul>
+<li>HIGH priority: Simulated &quot;alarm&quot; processing (immediate)</li>
+<li>MEDIUM priority: Data logging (every 2 seconds)</li>
+<li>LOW priority: Statistics calculation (every 5 seconds)</li>
+</ul>
+</li>
+<li>Use system workqueue for HIGH priority</li>
+<li>Create custom workqueue for MEDIUM and LOW</li>
+<li>Each work handler prints its execution with timestamp</li>
+<li>Demonstrate work submission and execution order</li>
+</ol>
+<h3 id="expected-output">Expected Output</h3>
+<pre class="hljs"><code><div>[00:00:00.100] [HIGH] Alarm processed: Sensor threshold exceeded
+[00:00:02.000] [MED] Data logged: temp=25, humidity=60
+[00:00:02.050] [LOW] Stats: avg_temp=24.5 over 10 samples
+[00:00:04.000] [MED] Data logged: temp=26, humidity=58
+...
+</div></code></pre>
+<h3 id="hints">Hints</h3>
+<ul>
+<li>Use <code>K_WORK_DEFINE()</code> and <code>k_work_submit()</code></li>
+<li>Create delayable work for periodic tasks</li>
+<li>Use <code>k_work_queue_start()</code> for custom workqueue</li>
+<li>Pay attention to stack size for custom workqueue</li>
+</ul>
+<h3 id="learning-outcomes">Learning Outcomes</h3>
+<ul>
+<li>Workqueue concepts and usage</li>
+<li>Deferred work processing</li>
+<li>Priority-based task execution</li>
+<li>Custom workqueue creation</li>
+</ul>
+<hr>
+<h2 id="project-7-ring-buffer-data-logger">Project 7: Ring Buffer Data Logger</h2>
+<p><strong>Difficulty:</strong> ⭐⭐⭐ Advanced</p>
+<h3 id="objective">Objective</h3>
+<p>Implement a data logging system using a ring buffer that stores sensor samples and allows retrieval of historical data.</p>
+<h3 id="requirements">Requirements</h3>
+<ol>
+<li>Ring buffer stores last 20 sensor readings</li>
+<li>Producer thread adds new readings every 100ms</li>
+<li>Logger thread writes oldest 5 entries to &quot;storage&quot; every 1 second</li>
+<li>Implement commands:
+<ul>
+<li><code>log</code> - Dump current buffer contents</li>
+<li><code>stats</code> - Show buffer usage statistics</li>
+<li><code>clear</code> - Clear the buffer</li>
+</ul>
+</li>
+<li>Handle buffer overflow gracefully (overwrite oldest)</li>
+</ol>
+<h3 id="expected-output">Expected Output</h3>
+<pre class="hljs"><code><div>[Producer] Added sample #45: value=127
+[Logger] Writing batch: [123, 124, 125, 126, 127]
+&gt; stats
+Buffer: 15/20 used | Total samples: 45 | Overflows: 25
+&gt; log
+[0] 126 [1] 127 [2] 128 [3] 129 [4] 130 ...
+</div></code></pre>
+<h3 id="hints">Hints</h3>
+<ul>
+<li>Use <code>struct ring_buf</code> from <code>&lt;zephyr/sys/ring_buffer.h&gt;</code></li>
+<li>Use <code>ring_buf_put()</code> and <code>ring_buf_get()</code></li>
+<li>Track statistics in a separate struct</li>
+<li>Use mutex for thread-safe access</li>
+</ul>
+<h3 id="learning-outcomes">Learning Outcomes</h3>
+<ul>
+<li>Ring buffer API usage</li>
+<li>Memory-efficient data storage</li>
+<li>Producer-consumer patterns</li>
+<li>Statistics tracking</li>
+</ul>
+<hr>
+<h2 id="project-8-event-driven-sensor-monitor">Project 8: Event-Driven Sensor Monitor</h2>
+<p><strong>Difficulty:</strong> ⭐⭐⭐ Advanced</p>
+<h3 id="objective">Objective</h3>
+<p>Create a sensor monitoring system using Zephyr's event objects to handle multiple sensor events concurrently.</p>
+<h3 id="requirements">Requirements</h3>
+<ol>
+<li>Simulate 3 sensors: Temperature, Humidity, Pressure</li>
+<li>Each sensor has its own thread generating random values</li>
+<li>Use events to signal:
+<ul>
+<li><code>TEMP_READY</code> (bit 0)</li>
+<li><code>HUMID_READY</code> (bit 1)</li>
+<li><code>PRESSURE_READY</code> (bit 2)</li>
+<li><code>ALARM</code> (bit 3) - when any value exceeds threshold</li>
+</ul>
+</li>
+<li>Monitor thread waits for events and processes them</li>
+<li>Support waiting for any event OR all events</li>
+</ol>
+<h3 id="expected-output">Expected Output</h3>
+<pre class="hljs"><code><div>[Sensor] Temp: 35°C (ALARM - threshold exceeded!)
+[Monitor] Event received: TEMP_READY | ALARM
+[Monitor] Processing temperature alarm...
+[Sensor] Humidity: 65%
+[Sensor] Pressure: 1013 hPa
+[Monitor] Event received: HUMID_READY | PRESSURE_READY
+[Monitor] All sensors read - logging data...
+</div></code></pre>
+<h3 id="hints">Hints</h3>
+<ul>
+<li>Use <code>K_EVENT_DEFINE()</code> for event object</li>
+<li>Use <code>k_event_post()</code> to signal events</li>
+<li>Use <code>k_event_wait()</code> with appropriate flags</li>
+<li><code>K_EVENT_WAIT_ANY</code> vs <code>K_EVENT_WAIT_ALL</code></li>
+</ul>
+<h3 id="learning-outcomes">Learning Outcomes</h3>
+<ul>
+<li>Event objects and event-driven design</li>
+<li>Bitwise event handling</li>
+<li>Multi-sensor data aggregation</li>
+<li>Alarm/threshold monitoring</li>
+</ul>
+<hr>
+<h2 id="project-9-priority-inversion-demonstration">Project 9: Priority Inversion Demonstration</h2>
+<p><strong>Difficulty:</strong> ⭐⭐⭐⭐ Expert</p>
+<h3 id="objective">Objective</h3>
+<p>Create a demonstration of the priority inversion problem and show how mutex priority inheritance solves it.</p>
+<h3 id="requirements">Requirements</h3>
+<ol>
+<li>Create 3 threads:
+<ul>
+<li>HIGH priority (pri=1): Needs shared resource</li>
+<li>MEDIUM priority (pri=3): CPU-intensive, no shared resource</li>
+<li>LOW priority (pri=5): Holds shared resource</li>
+</ul>
+</li>
+<li>Demonstrate priority inversion scenario</li>
+<li>Show execution timeline with timestamps</li>
+<li>Run scenario twice:
+<ul>
+<li>First without priority inheritance</li>
+<li>Then with priority inheritance enabled</li>
+</ul>
+</li>
+<li>Compare and print execution times</li>
+</ol>
+<h3 id="expected-behavior">Expected Behavior</h3>
+<p><strong>Without Priority Inheritance:</strong></p>
+<pre class="hljs"><code><div>[LOW] Acquired mutex
+[HIGH] Waiting for mutex...
+[MED] Running CPU task (blocking HIGH indirectly)
+[MED] Done
+[LOW] Released mutex
+[HIGH] Acquired mutex - waited 500ms!
+</div></code></pre>
+<p><strong>With Priority Inheritance:</strong></p>
+<pre class="hljs"><code><div>[LOW] Acquired mutex
+[HIGH] Waiting for mutex (LOW boosted to pri=1)
+[LOW] Released mutex
+[HIGH] Acquired mutex - waited 50ms!
+[MED] Running CPU task
+</div></code></pre>
+<h3 id="hints">Hints</h3>
+<ul>
+<li>Use <code>k_thread_priority_get()</code> to show priority changes</li>
+<li>Careful timing setup to trigger inversion</li>
+<li>MEDIUM thread should have loop with <code>k_busy_wait()</code></li>
+<li>Compare wall-clock times</li>
+</ul>
+<h3 id="learning-outcomes">Learning Outcomes</h3>
+<ul>
+<li>Priority inversion understanding</li>
+<li>Priority inheritance mechanism</li>
+<li>Real-time scheduling concepts</li>
+<li>Performance measurement</li>
+</ul>
+<hr>
+<h2 id="project-10-mini-shell-with-background-tasks">Project 10: Mini Shell with Background Tasks</h2>
+<p><strong>Difficulty:</strong> ⭐⭐⭐⭐ Expert</p>
+<h3 id="objective">Objective</h3>
+<p>Build a mini shell that can start, stop, and monitor background tasks, similar to a simple task manager.</p>
+<h3 id="requirements">Requirements</h3>
+<ol>
+<li>Implement shell commands:
+<ul>
+<li><code>start &lt;task_name&gt;</code> - Start a background task</li>
+<li><code>stop &lt;task_id&gt;</code> - Stop a running task</li>
+<li><code>list</code> - List all tasks with status</li>
+<li><code>info &lt;task_id&gt;</code> - Show detailed task info</li>
+<li><code>mem</code> - Show memory usage</li>
+</ul>
+</li>
+<li>Support at least 4 concurrent background tasks:
+<ul>
+<li><code>counter</code> - Continuously incrementing counter</li>
+<li><code>blinker</code> - LED blink simulation</li>
+<li><code>monitor</code> - System resource monitor</li>
+<li><code>logger</code> - Periodic log writer</li>
+</ul>
+</li>
+<li>Tasks should be suspendable/resumable</li>
+<li>Show task CPU time estimation</li>
+</ol>
+<h3 id="expected-output">Expected Output</h3>
+<pre class="hljs"><code><div>shell&gt; start counter
+Task 'counter' started with ID=1
+shell&gt; start blinker
+Task 'blinker' started with ID=2
+shell&gt; list
+ID  NAME      STATUS    RUNTIME
+1   counter   RUNNING   1250ms
+2   blinker   RUNNING   800ms
+shell&gt; stop 1
+Task 1 stopped
+shell&gt; info 2
+Task: blinker
+Status: RUNNING
+Priority: 5
+Stack: 512/1024 used
+Runtime: 2100ms
+shell&gt; mem
+Total heap: 8192 bytes
+Used: 2048 bytes (25%)
+Free: 6144 bytes
+</div></code></pre>
+<h3 id="hints">Hints</h3>
+<ul>
+<li>Use array of thread structures for task management</li>
+<li><code>k_thread_suspend()</code> and <code>k_thread_resume()</code> for task control</li>
+<li>Track task start time for runtime calculation</li>
+<li>Use <code>k_thread_stack_space_get()</code> for stack usage</li>
+<li>Consider using thread names via <code>k_thread_name_set()</code></li>
+</ul>
+<h3 id="learning-outcomes">Learning Outcomes</h3>
+<ul>
+<li>Dynamic thread management</li>
+<li>System monitoring and introspection</li>
+<li>Shell implementation patterns</li>
+<li>Resource tracking and management</li>
+</ul>
+<hr>
+<h2 id="bonus-challenges">Bonus Challenges</h2>
+<h3 id="challenge-a-add-persistence">Challenge A: Add Persistence</h3>
+<p>Modify Project 7 to save logged data to simulated flash storage using Zephyr's flash API or settings subsystem.</p>
+<h3 id="challenge-b-network-integration">Challenge B: Network Integration</h3>
+<p>Extend Project 5 to also accept commands via a simulated network socket (for <code>qemu_x86</code> with networking).</p>
+<h3 id="challenge-c-power-management">Challenge C: Power Management</h3>
+<p>Add sleep modes to Project 8 where the system enters low-power state when no sensor activity occurs for 10 seconds.</p>
+<hr>
+<h2 id="project-template">Project Template</h2>
+<p>Use this template structure for each project:</p>
+<pre class="hljs"><code><div>project_name/
+├── CMakeLists.txt
+├── prj.conf
+├── src/
+│   └── main.c
+└── run_qemu.sh
+</div></code></pre>
+<p><strong>CMakeLists.txt:</strong></p>
+<pre class="hljs"><code><div><span class="hljs-keyword">cmake_minimum_required</span>(VERSION <span class="hljs-number">3.20</span>.<span class="hljs-number">0</span>)
+<span class="hljs-keyword">find_package</span>(Zephyr REQUIRED HINTS $ENV{ZEPHYR_BASE})
+<span class="hljs-keyword">project</span>(project_name)
+<span class="hljs-keyword">target_sources</span>(app PRIVATE src/main.c)
+</div></code></pre>
+<p><strong>prj.conf:</strong></p>
+<pre class="hljs"><code><div><span class="hljs-attr">CONFIG_PRINTK</span>=y
+<span class="hljs-attr">CONFIG_HEAP_MEM_POOL_SIZE</span>=<span class="hljs-number">4096</span>
+<span class="hljs-comment"># Add project-specific configs</span>
+</div></code></pre>
+<p><strong>run_qemu.sh:</strong></p>
+<pre class="hljs"><code><div><span class="hljs-meta">#!/bin/bash</span>
+west build -b qemu_cortex_m3 -p always
+west build -t run
+</div></code></pre>
+<hr>
+<h2 id="evaluation-criteria">Evaluation Criteria</h2>
+<p>For each project, evaluate based on:</p>
+<table>
+<thead>
+<tr>
+<th>Criteria</th>
+<th>Weight</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Correct functionality</td>
+<td>40%</td>
+</tr>
+<tr>
+<td>Code quality &amp; organization</td>
+<td>20%</td>
+</tr>
+<tr>
+<td>Proper use of Zephyr APIs</td>
+<td>20%</td>
+</tr>
+<tr>
+<td>Error handling</td>
+<td>10%</td>
+</tr>
+<tr>
+<td>Documentation/comments</td>
+<td>10%</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="additional-resources">Additional Resources</h2>
+<ul>
+<li><a href="https://docs.zephyrproject.org/">Zephyr Project Documentation</a></li>
+<li><a href="https://docs.zephyrproject.org/latest/doxygen/html/index.html">Zephyr API Reference</a></li>
+<li><a href="https://docs.zephyrproject.org/latest/samples/index.html">Zephyr Samples</a></li>
+<li>Local guides in this repository:
+<ul>
+<li><code>Zephyr_Threads_And_Synchronization_Guide.md</code></li>
+<li><code>Zephyr_Software_Timer_Guide.md</code></li>
+<li><code>Zephyr_Devicetree_Overlay_Guide.md</code></li>
+<li><code>Zephyr_Project_Configuration_Guide.md</code></li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><em>Happy Coding with Zephyr RTOS!</em> 🚀</p>
+
+</body>
+</html>
