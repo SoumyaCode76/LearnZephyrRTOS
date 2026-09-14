@@ -2,6 +2,7 @@
 #include <zephyr/drivers/gpio.h>
 #include <zephyr/device.h>
 #include <zephyr/devicetree.h>
+#include <zephyr/logging/log.h>
 
 // DT indices must be compile-time literals, so build the array at
 // preprocessing time with DT_FOREACH_PROP_ELEM instead of a runtime loop.
@@ -23,6 +24,8 @@ const uint8_t external_led_pin_flags[] = {
 
 #define NUM_OF_LEDS ARRAY_SIZE(external_leds)
 
+LOG_MODULE_REGISTER(nordic_blinky, LOG_LEVEL_DBG);
+
 int main(void)
 {
     for(uint8_t ix = 0; ix < NUM_OF_LEDS; ix++)
@@ -38,6 +41,19 @@ int main(void)
             break;
         }
     }
+    int exercise_num = 2;
+    uint8_t data[] = {0x00, 0x01, 0x02, 0x03,
+                    0x04, 0x05, 0x06, 0x07,
+                    'H', 'e', 'l', 'l','o'};
+    // Printf-like messages
+    LOG_INF("nRF Connect SDK Fundamentals");
+    LOG_INF("Exercise %d",exercise_num);    
+    LOG_DBG("A log message in debug level");
+    LOG_WRN("A log message in warning level!");
+    LOG_ERR("A log message in Error level!");
+    // Hexdump some data
+    LOG_HEXDUMP_INF(data, sizeof(data),"Sample Data!"); 
+
     while(1)
     {
         gpio_pin_toggle(external_leds[0], external_led_pin[0]);
