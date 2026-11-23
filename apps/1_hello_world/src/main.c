@@ -6,10 +6,10 @@
 int main(void)
 {
     int count = 0;
+    // printk("Hello World! %d\n", count++);
     while(1)
     {
-        printk("Hello World! %d\n", count++);
-        k_msleep(2000);
+        k_msleep(10000000);
     }
     return 0;
 }

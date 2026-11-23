@@ -57,7 +57,7 @@ void thread0_handler_fcn(void* p1, void* p2, void* p3)
 void thread1_handler_fcn(void* p1, void* p2, void* p3)
 {
     uint64_t time_stamp;
-    int64_t delta_time;
+    volatile int64_t delta_time;
 
     while (1) {
         time_stamp = k_uptime_get();

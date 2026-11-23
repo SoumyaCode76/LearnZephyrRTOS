@@ -14,3 +14,7 @@
         user-leds = &ext_leds;
     };
 };
+
+&gpio0 {
+    status = "disabled";
+};

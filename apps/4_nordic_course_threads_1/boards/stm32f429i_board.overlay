@@ -1,0 +1,16 @@
+/ {
+    leds: leds {
+        compatible = "gpio-leds";
+
+        ext_leds: led_ext {
+            gpios = <&gpiog 13 GPIO_ACTIVE_HIGH>,<&gpiog 14 GPIO_ACTIVE_HIGH>,<&gpioa 7 GPIO_ACTIVE_HIGH>;
+            label = "External LEDs";
+        };
+    };
+};
+
+/ {
+    aliases {
+        user-leds = &ext_leds;
+    };
+};
